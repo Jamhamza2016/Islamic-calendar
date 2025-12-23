@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقويم الهجري - Islamic Hijri Calendar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0d5c46;
+            --secondary-color: #1a7c5f;
+            --accent-color: #d4af37;
+            --light-bg: #f8f9fa;
+            --dark-text: #2d3436;
+            --light-text: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cairo', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            color: var(--dark-text);
+            min-height: 100vh;
+            direction: ltr;
+            padding-top: 90px; /* Header height ke liye padding */
+        }
+
+        body.rtl {
+            direction: rtl;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Fixed Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #0a4a38);
+            color: var(--light-text);
+            padding: 15px 0;
+            box-shadow: 0 5px 20px rgba(13, 92, 70, 0.3);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        /* Scroll hone par header ka shadow aur compact design */
+        header.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, var(--primary-color), #0a4a38);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: var(--transition);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.8rem;
+            color: var(--accent-color);
+            transition: var(--transition);
+        }
+
+        header.scrolled .logo-icon {
+            font-size: 2.2rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            transition: var(--transition);
+        }
+
+        header.scrolled .logo-text h1 {
+            font-size: 1.5rem;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            transition: var(--transition);
+            max-height: 20px;
+            overflow: hidden;
+        }
+
+        header.scrolled .logo-text p {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .language-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .language-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .language-btn.active {
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+
+        header.scrolled .language-btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 30px 0 50px;
+        }
+
+        /* Date Display Section */
+        .date-display-section {
+            margin-bottom: 40px;
+        }
+
+        .current-date-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 25px;
+            border-top: 5px solid var(--accent-color);
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .current-date-card .hijri-date {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .current-date-card .gregorian-date {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .current-date-card .conversion-text {
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            background-color: #f0f9f5;
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        /* Calendar Controls */
+        .calendar-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.8s ease 0.2s both;
+        }
+
+        .month-year-selector {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.1);
+        }
+
+        .month-year-display {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .month-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .month-btn {
+            padding: 10px 20px;
+            background: #f0f9f5;
+            border: 1px solid #d1e7dd;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            color: var(--dark-text);
+        }
+
+        .month-btn:hover {
+            background: #d1e7dd;
+        }
+
+        .month-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Calendar Grid */
+        .calendar-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease 0.4s both;
+        }
+
+        @media (max-width: 992px) {
+            .calendar-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calendar-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .calendar-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .calendar-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .calendar-body {
+            padding: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            padding: 15px 5px;
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 15px 5px;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: var(--transition);
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .calendar-day:hover {
+            background-color: #f0f9f5;
+        }
+
+        .calendar-day.today {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(13, 92, 70, 0.3);
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+            background-color: #f9f9f9;
+        }
+
+        .calendar-day.hijri-day {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .calendar-day .gregorian-day {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            color: #666;
+        }
+
+        .calendar-day.today .gregorian-day {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Info Cards */
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease 0.6s both;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-card h3 i {
+            color: var(--accent-color);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        body.rtl .back-to-top {
+            right: auto;
+            left: 30px;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            color: var(--light-text);
+            padding: 40px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* RTL Specific Styles */
+        body.rtl .calendar-day-header,
+        body.rtl .calendar-day,
+        body.rtl .month-year-display,
+        body.rtl .hijri-date {
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body.rtl .nav-btn i {
+            transform: rotate(180deg);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 120px; /* Mobile par header height zyada hai */
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .current-date-card .hijri-date {
+                font-size: 2.5rem;
+            }
+            
+            .calendar-controls {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .month-year-selector {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .month-selector {
+                justify-content: center;
+            }
+            
+            .calendar-day {
+                min-height: 60px;
+                padding: 10px 5px;
+            }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+            
+            body.rtl .back-to-top {
+                left: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 130px;
+            }
+            
+            .calendar-day-header,
+            .calendar-day {
+                font-size: 0.9rem;
+            }
+            
+            .calendar-day.hijri-day {
+                font-size: 1rem;
+            }
+            
+            .month-btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .current-date-card .hijri-date {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header id="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1 id="site-title">التقويم الهجري - Islamic Hijri Calendar</h1>
+                        <p id="site-subtitle">Islamic dates with Gregorian conversion</p>
+                    </div>
+                </div>
+                <div class="language-controls">
+                    <button class="language-btn active" id="lang-ar">
+                        <i class="fas fa-language"></i> العربية
+                    </button>
+                    <button class="language-btn" id="lang-en">
+                        <i class="fas fa-language"></i> English
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Current Date Display -->
+            <section class="date-display-section">
+                <div class="current-date-card">
+                    <div class="hijri-date" id="current-hijri">١٥ رمضان ١٤٤٦ هـ</div>
+                    <div class="gregorian-date" id="current-gregorian">Monday, 24 March 2025</div>
+                    <div class="conversion-text" id="conversion-text">Today is 15 Ramadan 1446 AH in the Islamic calendar</div>
+                </div>
+            </section>
+
+            <!-- Calendar Controls -->
+            <section class="calendar-controls">
+                <div class="month-year-selector">
+                    <button class="nav-btn" id="prev-year">
+                        <i class="fas fa-chevron-double-left"></i>
+                    </button>
+                    <button class="nav-btn" id="prev-month">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="month-year-display" id="month-year-display">رمضان ١٤٤٦</div>
+                    
+                    <button class="nav-btn" id="next-month">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="nav-btn" id="next-year">
+                        <i class="fas fa-chevron-double-right"></i>
+                    </button>
+                </div>
+                
+                <div class="month-selector" id="month-selector">
+                    <!-- Months will be populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Calendar Grids -->
+            <section class="calendar-section">
+                <!-- Hijri Calendar -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <h2 id="hijri-calendar-title">التقويم الهجري - Hijri Calendar</h2>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="calendar-grid" id="hijri-calendar-days">
+                            <!-- Hijri calendar days will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gregorian Calendar -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <h2 id="gregorian-calendar-title">التقويم الميلادي - Gregorian Calendar</h2>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="calendar-grid" id="gregorian-calendar-days">
+                            <!-- Gregorian calendar days will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Info Cards -->
+            <section class="info-section">
+                <div class="info-card">
+                    <h3><i class="fas fa-info-circle"></i> <span id="info-title-1">معلومات التقويم الهجري</span></h3>
+                    <p id="info-text-1">التقويم الهجري هو تقويم قمري يستخدم في الإسلام لتحديد المناسبات الدينية. يتكون من 12 شهراً قمرياً، وعدد أيام السنة 354 أو 
