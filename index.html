@@ -1,12 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التقويم الهجري - Islamic Hijri Calendar</title>
+    <title>Islamic Hijri Calendar - Professional</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --primary-color: #0d5c46;
             --secondary-color: #1a7c5f;
@@ -14,27 +20,584 @@
             --light-bg: #f8f9fa;
             --dark-text: #2d3436;
             --light-text: #f8f9fa;
-            --border-radius: 12px;
-            --shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --border-radius: 10px;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         body {
-            font-family: 'Cairo', 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
             color: var(--dark-text);
-            min-height: 100vh;
+            background-color: #f5f7fa;
             direction: ltr;
         }
 
-        body.rtl {
-            direction: rtl;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text);
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .language-selector {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .language-selector:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 40px 0;
+        }
+
+        .calendar-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .calendar-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .calendar-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .calendar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .calendar-header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .calendar-body {
+            padding: 25px;
+        }
+
+        .current-date {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .hijri-date {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .gregorian-date {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .islamic-month {
+            color: var(--secondary-color);
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day {
+            text-align: center;
+            padding: 10px 5px;
+            font-weight: 500;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day.highlight {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+
+        /* Info Section */
+        .info-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .info-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .info-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        /* Prayer Times */
+        .prayer-times {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+
+        .prayer-times h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .prayer-item {
+            text-align: center;
+            padding: 20px 10px;
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            transition: all 0.3s;
+        }
+
+        .prayer-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .prayer-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .prayer-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .prayer-time {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .prayer-item.active .prayer-time {
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .hijri-date {
+                font-size: 2rem;
+            }
+            
+            .prayer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .prayer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Islamic Hijri Calendar</h1>
+                        <p>Islamic dates and prayer times</p>
+                    </div>
+                </div>
+                <div class="language-selector">
+                    <i class="fas fa-globe"></i>
+                    <span>English</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Calendar Section -->
+            <div class="calendar-container">
+                <!-- Hijri Calendar -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <h2>Islamic Hijri Calendar</h2>
+                        <p>1446 AH - Ramadan</p>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="current-date">
+                            <div class="hijri-date" id="hijri-date">١٥ رمضان ١٤٤٦</div>
+                            <div class="gregorian-date" id="gregorian-date">Monday, March 24, 2025</div>
+                            <div class="islamic-month" id="islamic-month">Ramadan 1446 AH</div>
+                        </div>
+                        
+                        <div class="calendar-grid" id="hijri-calendar">
+                            <!-- Hijri calendar days will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gregorian Calendar -->
+                <div class="calendar-card">
+                    <div class="calendar-header">
+                        <h2>Gregorian Calendar</h2>
+                        <p>March 2025</p>
+                    </div>
+                    <div class="calendar-body">
+                        <div class="current-date">
+                            <div class="gregorian-date" style="font-size: 2rem; color: var(--primary-color); margin-bottom: 10px;">March 24, 2025</div>
+                            <div class="islamic-month">Corresponds to 15 Ramadan 1446 AH</div>
+                        </div>
+                        
+                        <div class="calendar-grid" id="gregorian-calendar">
+                            <!-- Gregorian calendar days will be generated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="info-container">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Prayer Times</h3>
+                    <p>Accurate prayer times based on your location with calculation methods for different Islamic schools of thought.</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <h3>Islamic Events</h3>
+                    <p>Important Islamic dates, holidays, and events throughout the Hijri year with explanations and significance.</p>
+                </div>
+                
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-search-location"></i>
+                    </div>
+                    <h3>Location Based</h3>
+                    <p>Get precise prayer times and moon sighting information based on your geographical location.</p>
+                </div>
+            </div>
+
+            <!-- Prayer Times -->
+            <div class="prayer-times">
+                <h2>Today's Prayer Times</h2>
+                <div class="prayer-grid" id="prayer-times">
+                    <!-- Prayer times will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Islamic Calendar</h3>
+                    <p>The Hijri calendar is a lunar calendar consisting of 12 months in a year of 354 or 355 days. It is used to determine Islamic holidays and rituals.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Monthly Calendar</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Prayer Times</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Islamic Events</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i> Moon Sighting</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Islamic Calendar Foundation</li>
+                        <li><i class="fas fa-phone"></i> +1 (234) 567-8900</li>
+                        <li><i class="fas fa-envelope"></i> info@islamiccalendar.com</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 Islamic Hijri Calendar. All rights reserved. This website provides approximate Islamic dates and may vary based on moon sighting.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Current date data
+        const currentDate = new Date();
+        const hijriMonths = ["Muharram", "Safar", "Rabi' al-Awwal", "Rabi' al-Thani", "Jumada al-Awwal", "Jumada al-Thani", "Rajab", "Sha'ban", "Ramadan", "Shawwal", "Dhu al-Qi'dah", "Dhu al-Hijjah"];
+        const gregorianMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        
+        // Sample prayer times
+        const prayerTimes = [
+            { name: "Fajr", time: "5:15 AM", active: false },
+            { name: "Sunrise", time: "6:30 AM", active: false },
+            { name: "Dhuhr", time: "12:45 PM", active: false },
+            { name: "Asr", time: "4:20 PM", active: true },
+            { name: "Maghrib", time: "6:55 PM", active: false },
+            { name: "Isha", time: "8:15 PM", active: false }
+        ];
+        
+        // Sample Hijri date for demonstration
+        const hijriDate = {
+            day: 15,
+            month: 9, // Ramadan
+            year: 1446,
+            monthName: "Ramadan"
+        };
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current dates
+            document.getElementById('hijri-date').textContent = convertToArabicNumerals(`${hijriDate.day} ${hijriDate.monthName} ${hijriDate.year}`);
+            document.getElementById('gregorian-date').textContent = formatGregorianDate(currentDate);
+            document.getElementById('islamic-month').textContent = `${hijriDate.monthName} ${hijriDate.year} AH`;
+            
+            // Generate Hijri calendar
+            generateHijriCalendar();
+            
+            // Generate Gregorian calendar
+            generateGregorianCalendar();
+            
+            // Generate prayer times
+            generatePrayerTimes();
+        });
+        
+        // Convert numbers to Arabic numerals
+        function convertToArabicNumerals(text) {
+            const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            return text.replace(/\d/g, digit => arabicNumerals[digit]);
+        }
+        
+        // Format Gregorian date
+        function formatGregorianDate(date) {
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            return `${days[date.getDay()]}, ${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        }
+        
+        // Generate Hijri calendar
+        function generateHijriCalendar() {
+            const calendarGrid = document.getElementById('hijri-calendar');
+            
+            // Add day headers
+            daysOfWeek.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                calendarGrid.appendChild(dayElement);
+            });
+            
+            // For demonstration, we're creating a simplified calendar
+            // In a real application, you would use a proper Hijri calendar calculation library
+            const totalDays = 30; // Islamic months have 29 or 30 days
+            const startDay = 3; // Assume Ramadan 1446 starts on Thursday
+            
+            // Add empty cells for days before the start of the month
+            for (let i = 0; i < startDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day other-month';
+                emptyDay.textContent = "";
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= totalDays; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = convertToArabicNumerals(day.toString());
+                
+                // Highlight current day
+                if (day === hijriDate.day) {
+                    dayElement.classList.add('highlight');
+                }
+                
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+        
+        // Generate Gregorian calendar
+        function generateGregorianCalendar() {
+            const calendarGrid = document.getElementById('gregorian-calendar');
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Add day headers
+            daysOfWeek.forEach(day => {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day            direction: rtl;
             font-family: 'Cairo', sans-serif;
         }
 
