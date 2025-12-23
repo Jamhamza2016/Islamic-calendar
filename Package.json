@@ -1,0 +1,32 @@
+{
+  "name": "islamic-hijri-calendar",
+  "version": "1.0.0",
+  "description": "Professional Islamic Hijri Calendar Website with dual calendar view and Arabic/English support",
+  "main": "index.html",
+  "scripts": {
+    "dev": "serve .",
+    "start": "serve .",
+    "build": "echo 'Build complete'",
+    "test": "echo 'No tests specified'"
+  },
+  "keywords": [
+    "islamic",
+    "hijri",
+    "calendar",
+    "arabic",
+    "islamic-calendar",
+    "prayer-times"
+  ],
+  "author": "Islamic Calendar Foundation",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/islamic-hijri-calendar.git"
+  }
+}
